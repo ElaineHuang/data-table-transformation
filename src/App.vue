@@ -6,10 +6,17 @@
         <button class="btn btn-primary submit mt-3" type="submit">Submit</button>
       </form>
     </div>
-    <table class="table table-striped mt-5">
-      <tr v-for="(row, rowIndex) in tableData" :key="`row-${rowIndex}`">
-        <td v-for="(col, colIndex) in row" :key="`col-${colIndex}`">{{ col }}</td>
-      </tr>
+    <table class="table table-striped mt-5" v-if="tableData.length > 0">
+      <thead class="thead-dark">
+        <tr>
+          <th v-for="(col, colIndex) in tableData[0]" :key="`${colIndex}`">{{ colIndex + 1 }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(row, rowIndex) in tableData" :key="`row-${rowIndex}`">
+          <td v-for="(col, colIndex) in row" :key="`col-${colIndex}`">{{ col }}</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
