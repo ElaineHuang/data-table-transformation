@@ -1,22 +1,46 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="container">
+      <form @submit.prevent="submitForm">
+        <textarea required v-model="currentData" class="form-control" cols="30" rows="10"></textarea>
+        <button class="btn btn-primary submit mt-3" type="submit">Submit</button>
+      </form>
+    </div>
+    <table class="table table-striped mt-5">
+      <tr v-for="(row, rowIndex) in tableData" :key="`row-${rowIndex}`">
+        <td v-for="(col, colIndex) in row" :key="`col-${colIndex}`">{{ col }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+//eslint-disable-next-line no-console 
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data () {
+    return {
+      currentData: '',
+      tableData: []
+    }
+  },
+  methods: {
+    submitForm () {
+      const rows = this.currentData.trim().split('#')
+      this.tableData = rows.map((row) => {
+        const pureRow = row.trim()
+        const cols = pureRow.split('!')
+        return cols
+      })
+    }
   }
 }
 </script>
 
 <style>
+@import "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,5 +48,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.submit {
+  width: 150px;
 }
 </style>
