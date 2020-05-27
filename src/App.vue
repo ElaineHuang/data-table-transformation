@@ -5,6 +5,9 @@
         <textarea required v-model="currentData" class="form-control" cols="30" rows="10"></textarea>
         <button class="btn btn-primary submit mt-3" type="submit">Submit</button>
       </form>
+      <div class="text-right">
+        <button v-if="downloadable" class="btn btn-success submit mt-3" @click="download">Download</button>
+      </div>
     </div>
     <table class="table table-striped mt-5" v-if="tableData.length > 0">
       <thead class="thead-dark">
@@ -23,13 +26,15 @@
 
 <script>
 //eslint-disable-next-line no-console 
+import { export_json_to_excel } from './excel/Export2Excel'
 
 export default {
   name: 'App',
   data () {
     return {
       currentData: '',
-      tableData: []
+      tableData: [],
+      downloadable: false
     }
   },
   methods: {
@@ -39,6 +44,20 @@ export default {
         const pureRow = row.trim()
         const cols = pureRow.split('!')
         return cols
+      })
+      this.downloadable = true
+    },
+    download () {
+      const tHeader = []
+      for (let i = 0; i < this.tableData[0].length; i++) {
+        tHeader.push(i + 1)
+      }
+      export_json_to_excel({
+        header: tHeader, //Header Required
+        data: this.tableData, //Specific data Required
+        filename: 'law-doc', //Optional
+        autoWidth: true, //Optional
+        bookType: 'xlsx' //Optional
       })
     }
   }
