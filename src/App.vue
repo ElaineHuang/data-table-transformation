@@ -1,21 +1,21 @@
 <template>
   <div id="app">
     <div class="container">
-      <h1 class="mb-4">Transformation your legal document</h1>
+      <h1 class="mb-4">Transform your legal document</h1>
       <form @submit.prevent="submitForm">
         <nav class="nav nav-pills nav-fill">
           <a class="nav-item nav-link" href="#" :class="{ active: tab === 0 }" @click="tab = 0">Upload files</a>
           <a class="nav-item nav-link" href="#" :class="{ active: tab === 1 }" @click="tab = 1">Input as string</a>
         </nav>
         <label v-if="tab === 0" class="file-block">
-          <p class="mt-4">Please Drop your .txt files here</p>
+          <p class="mt-4">Please drop your .txt files here</p>
           <input type="file" accept=".txt" multiple @change="loadTextFromFile" />
         </label>
         <textarea v-if="tab === 1" v-model="currentData" class="form-control mt-3" cols="30" rows="10"></textarea>
         <button class="btn btn-primary submit mt-3" type="submit">Submit</button>
       </form>
       <div class="text-right">
-        <button v-if="downloadable" class="btn btn-success submit mt-3" @click="download">Download</button>
+        <button v-if="downloadable" class="btn btn-success submit mt-3" @click="download">Download Excel</button>
       </div>
     </div>
     <table class="table table-striped mt-5" v-if="tableData.length > 0">
