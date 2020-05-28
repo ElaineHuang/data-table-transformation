@@ -1,8 +1,17 @@
 <template>
   <div id="app">
     <div class="container">
+      <h1 class="mb-4">Transformation your legal document</h1>
       <form @submit.prevent="submitForm">
-        <textarea required v-model="currentData" class="form-control" cols="30" rows="10"></textarea>
+        <nav class="nav nav-pills nav-fill">
+          <a class="nav-item nav-link" href="#" :class="{ active: tab === 0 }" @click="tab = 0">Upload files</a>
+          <a class="nav-item nav-link" href="#" :class="{ active: tab === 1 }" @click="tab = 1">Input as string</a>
+        </nav>
+        <label v-if="tab === 0" class="file-block">
+          <p class="mt-4">Please Drop your .txt files here</p>
+          <input type="file" accept=".txt" multiple @change="loadTextFromFile" />
+        </label>
+        <textarea v-if="tab === 1" v-model="currentData" class="form-control mt-3" cols="30" rows="10"></textarea>
         <button class="btn btn-primary submit mt-3" type="submit">Submit</button>
       </form>
       <div class="text-right">
@@ -34,12 +43,16 @@ export default {
     return {
       currentData: '',
       tableData: [],
-      downloadable: false
+      downloadable: false,
+      example: null,
+      fileText: '',
+      tab: 0
     }
   },
   methods: {
     submitForm () {
-      const rows = this.currentData.trim().split('#')
+      const target = this.tab ? this.currentData : this.fileText
+      const rows = target.trim().split('#')
       this.tableData = rows.map((row) => {
         const pureRow = row.trim()
         const cols = pureRow.split('!')
@@ -59,6 +72,16 @@ export default {
         autoWidth: true, //Optional
         bookType: 'xlsx' //Optional
       })
+    },
+    loadTextFromFile (e) {
+      for (let i = 0; i < e.target.files.length; i++) {
+        const file = e.target.files[i]
+        const reader = new FileReader()
+        reader.onload = e => {
+          this.fileText = this.fileText + e.target.result
+        }
+        reader.readAsText(file, 'big5')
+      }
     }
   }
 }
@@ -78,5 +101,13 @@ export default {
 
 .submit {
   width: 150px;
+}
+
+.file-block {
+  display: block;
+  background: #eee;
+  height: 220px;
+  margin-top: 20px;
+  border: 1px dashed #9a9a9a;
 }
 </style>
