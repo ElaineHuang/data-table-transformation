@@ -53,10 +53,21 @@ export default {
     submitForm () {
       const target = this.tab ? this.currentData : this.fileText
       const rows = target.trim().split('#')
-      this.tableData = rows.map((row) => {
+      const twoLayersArray = rows.map((row) => {
         const pureRow = row.trim()
         const cols = pureRow.split('!')
         return cols
+      })
+      const colNumArray = twoLayersArray.map((row) => row.length).sort()
+      const maxCol = colNumArray[colNumArray.length - 1]
+      this.tableData = twoLayersArray.map((row) => {
+        if (row.length < maxCol) {
+          const distance = maxCol - row.length
+          for (let i = 0; i < distance; i++) {
+            row.push('')
+          }
+        }
+        return row
       })
       this.downloadable = true
     },
